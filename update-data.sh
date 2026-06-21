@@ -9,6 +9,8 @@ if [ -f gform.csv ]; then
     # but don't include the first row (headers)
     (head -n 1 data.csv && tail -n +2 data.csv | sort -t, -g -k2,2) > data_sorted.csv
     mv data_sorted.csv data.csv
+    # Remove trailing newline
+    truncate -s -1 data.csv
 
     # Remove gform.csv
     rm gform.csv

@@ -26,8 +26,9 @@ function onFormSubmit(e) {
     // Build file content from form responses
     // First value is timestamp of submission
     const timestamp = responses[0].replace(/[:/ ]/g, "-");
-    let title = "gform_" + timestamp; 
-    let body = responses.slice(1).join();
+    let title = "gform_" + timestamp;
+    // Join the remaining responses into a CSV line, strip and commas from responses, don't escape quotes
+    let body = responses.slice(1).map(value => `"${value.replace(/,/g, '')}"`).join(",");
 
     // Create a unique branch name using timestamp
     const branchName = title;
