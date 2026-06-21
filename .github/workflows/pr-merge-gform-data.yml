@@ -1,0 +1,28 @@
+name: PR Merge Gform Data
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+jobs:
+  update-data:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run data update script
+        run: |
+          chmod +x ./update-data.sh
+          ./update-data.sh
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Merge gform data update from PR #${{ github.event.pull_request.number }} into data.csv"
+          git push origin main
