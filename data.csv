@@ -1,4 +1,5 @@
 name,number,bool,notes
+"Foo Net","27","Yes","AAAAAAAAA,BBCC,DD"
 ccc,55,no,another test
 aaa,111,yes,just a test
 bbb,222,no,
