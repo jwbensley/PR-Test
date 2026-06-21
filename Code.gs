@@ -9,6 +9,7 @@ const GITHUB_OWNER = "jwbensley";
 const GITHUB_REPO  = "PR-Test";
 const BASE_BRANCH  = "main";
 const FILE_PATH    = "gform.csv"; // path in repo to create/update
+const FIELD_COUNT  = 4; // number of expected form fields (excluding timestamp)
 
 // ─── TRIGGER ──────────────────────────────────────────────────────────────────
 
@@ -27,8 +28,14 @@ function onFormSubmit(e) {
     // First value is timestamp of submission
     const timestamp = responses[0].replace(/[:/ ]/g, "-");
     let title = "gform_" + timestamp;
-    // Join the remaining responses into a CSV line, strip and commas from responses, don't escape quotes
-    let body = responses.slice(1).map(value => `"${value.replace(/,/g, '')}"`).join(",");
+    // Join the remaining responses into a CSV line, strip and commas from responses
+    let body = responses.slice(1).map(value => value.replace(/,/g, ' ')).join(",");
+
+    // Add commas for any missing fields to ensure consistent CSV format
+    const missingFields = FIELD_COUNT - (responses.length - 1);
+    if (missingFields > 0) {
+      body += ",".repeat(missingFields);
+    }
 
     // Create a unique branch name using timestamp
     const branchName = title;
